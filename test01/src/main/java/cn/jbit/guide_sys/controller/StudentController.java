@@ -41,7 +41,7 @@ public class StudentController {
     }
 
     @ResponseBody
-    @RequestMapping(value="/updStudent",produces="text/html;charset=UTF-8")
+    @RequestMapping("/updStudent")
     public String updStudent(Student student){
         int num=studentService.updStudent(student);
         return JSON.toJSONString(num);

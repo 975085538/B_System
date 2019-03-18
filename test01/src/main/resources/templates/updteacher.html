@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>信息管理系统</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript" src="/scripts/jquery/jquery-1.7.1.js"></script>
+    <link href="/style/authority/basic_layout.css" rel="stylesheet" type="text/css">
+    <link href="/style/authority/common_style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="/scripts/authority/commonAll.js"></script>
+    <script type="text/javascript" src="/scripts/jquery/jquery-1.4.4.min.js"></script>
+    <script src="/scripts/My97DatePicker/WdatePicker.js" type="text/javascript" defer="defer"></script>
+    <script type="text/javascript">
+        $(function(){
+            var sui=Math.floor(Math.random()*(99999-10000))+10000;
+            var haha="200";
+            var lala=haha+sui;
+            $("#zhanghao").val(lala);
+        });
+        $(document).ready(function() {
+
+
+
+
+
+
+            /*
+             * 提交
+             */
+            $("#submitbutton").click(function() {
+                var id=$("#id").val();
+                var name=$("#name").val();
+                var pass=$("#pass").val();
+                var yuanyi=$("#yuanxi").val();
+                var fangxiang=$("#fangxiang").val();
+                var email=$("#email").val();
+                $.ajax({
+                    "url":"/teacher/updTeacher",
+                    "type":"post",
+                    "data":{
+                        'id':id,
+                        'tname':name,
+                        'tPass':pass,
+                        'yuanyi':yuanyi,
+                        'fangxiang':fangxiang,
+                        'email':email
+                    },
+                    "dataType":"json",
+                    "success":function(res){
+                        if(res>0){
+                            alert("修改成功");
+                            location.href="/tiao/teacher";
+                        }else{
+                            alert("修改失败");
+                        }
+                    }
+                })
+            });
+
+            /*
+             * 取消
+             */
+            $("#cancelbutton").click(function() {
+                /**  关闭弹出iframe  **/
+                location.href="/tiao/teacher";
+            });
+
+            var result = 'null';
+            if(result =='success'){
+                /**  关闭弹出iframe  **/
+                window.parent.$.fancybox.close();
+            }
+        });
+
+
+    </script>
+</head>
+<body>
+<form id="submitForm" name="submitForm" action="/xngzf/archives/initFangyuan.action" method="post">
+    <input type="hidden" name="fyID" value="14458625716623" id="fyID"/>
+    <input type="hidden" name="fyID" th:value="${t.id}" id="id"/>
+    <div id="container">
+        <div id="nav_links">
+            当前位置：&nbsp;>&nbsp;<span style="color: #1A5CC6;">添加老师</span>
+            <div id="page_close">
+                <a href="javascript:parent.$.fancybox.close();">
+                    <img src="/images/common/page_close.png" width="20" height="20" style="vertical-align: text-top;"/>
+                </a>
+            </div>
+        </div>
+        <div class="ui_content">
+            <table  cellspacing="0" cellpadding="0" width="100%" align="left" border="0">
+                <tr>
+                    <td class="ui_text_rt" width="80">老师姓名：</td>
+                    <td class="ui_text_lt">
+                        <input type="text" id="name" name="fangyuanEntity.fyCh" th:value="${t.getTname()}"  />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui_text_rt" width="80">密码：</td>
+                    <td class="ui_text_lt">
+                        <input type="text" id="pass" name="fangyuanEntity.fyCh" th:value="${t.gettPass()}"  />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui_text_rt" width="80">院系：</td>
+                    <td class="ui_text_lt">
+                        <input type="text" id="yuanxi" name="fangyuanEntity.fyCh" th:value="${t.getYuanyi()}"  />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui_text_rt" width="80">方向：</td>
+                    <td class="ui_text_lt">
+                            <input type="text" id="fangxiang" name="fangyuanEntity.fyCh" th:value="${t.getFangxiang()}"  />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui_text_rt" width="80">邮箱：</td>
+                    <td class="ui_text_lt">
+                        <input type="text" id="email" name="fangyuanEntity.fyCh" th:value="${t.getEmail()}"  />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>&nbsp;</td>
+                    <td class="ui_text_lt">
+                        &nbsp;<input id="submitbutton" type="button" value="提交" class="ui_input_btn01"/>
+                        &nbsp;<input id="cancelbutton" type="button" value="取消" class="ui_input_btn01"/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</form>
+
+</body>
+</html>

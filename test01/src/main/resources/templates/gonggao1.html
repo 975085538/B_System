@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <script type="text/javascript" src="/scripts/jquery/jquery-1.7.1.js"></script>
+    <link href="/style/authority/basic_layout.css" rel="stylesheet" type="text/css">
+    <link href="/style/authority/common_style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="/scripts/authority/commonAll.js"></script>
+    <script type="text/javascript" src="/scripts/fancybox/jquery.fancybox-1.3.4.js"></script>
+    <script type="text/javascript" src="/scripts/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+    <link rel="stylesheet" type="text/css" href="/style/authority/jquery.fancybox-1.3.4.css" media="screen"></link>
+    <title></title>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            SelDuty();
+            /** 新增   **/
+            $("#addBtn").fancybox({
+                'href'  : '/tiao/addgonggao',
+                'width' : 733,
+                'height' : 530,
+                'type' : 'iframe',
+                'hideOnOverlayClick' : false,
+                'showCloseButton' : false,
+                'onClosed' : function() {
+                    location.href="/tiao/gonggao";
+                }
+            });
+
+
+            /**编辑   **/
+            $("#bianji").fancybox({
+                'href'  : 'User/AddManagement',
+                'width' : 733,
+                'height' : 530,
+                'type' : 'iframe',
+                'hideOnOverlayClick' : false,
+                'showCloseButton' : false,
+                'onClosed' : function() {
+                    window.location.href = 'User/management';
+                }
+            });
+        });
+
+
+
+        //查询全部
+        function SelDuty(){
+            $("#AllDuty").html("");
+            $("#AllDuty").append("<tr><th>公告名称</th><th>公告内容</th><th>时间</th><th>操作</th></tr>");
+            $.ajax({
+                "url":"/gonggao/selGonggao",
+                "type":"post",
+                "dataType":"json",
+                "success":function(res){
+                    $(res).each(function(){
+                        $("#AllDuty").append("<tr>"+
+                            "<td>"+this.name+"</td>"+
+                            "<td>"+this.xinxi+"</td>"+
+                            "<td>"+this.date+"</td>"+
+                            "<td>"+
+                            "<a href='/tiao/updgonggao1?name="+this.name+"&&xinxi="+this.xinxi+"&&id="+this.id+"'>查看</a>"+
+                            "</td></tr>");
+                    });
+                }
+            })
+        }
+
+
+
+
+
+
+        /** 删除 **/
+        function del(fyID){
+            var flg=confirm("确定要删除么？");
+            if(flg==true){
+                $.ajax({
+                    "url":"/gonggao/delGonggao/"+fyID,
+                    "type":"post",
+                    "dataType":"json",
+                    "success":function(result){
+                        if(result>0){
+                            alert("删除成功");
+                            SelDuty();
+                        }else{
+                            alert("删除失败");
+                        }
+                    }
+                });
+            }
+        }
+
+
+
+
+    </script>
+    <style>
+        .alt td{ background:black !important;}
+    </style>
+</head>
+<body>
+<form id="submitForm" name="submitForm" action="" method="post">
+    <input type="hidden" name="allIDCheck" value="" id="allIDCheck"/>
+    <input type="hidden" name="fangyuanEntity.fyXqName" value="" id="fyXqName"/>
+    <div id="container">
+        <div class="ui_content">
+            <div class="ui_text_indent">
+                <div id="box_border">
+                    <!-- 						<div id="box_top">搜索</div>
+                                            <div id="box_center">
+                                                小区
+                                                <select name="fangyuanEntity.fyXqCode" id="fyXq" class="ui_select01" onchange="getFyDhListByFyXqCode();">
+                                                    <option value=""
+                                                    >--请选择--</option>
+                                                    <option value="6">瑞景河畔</option>
+                                                    <option value="77">蔚蓝小区</option>
+                                                    <option value="83">和盛园小区</option>
+                                                </select>
+
+                                                栋号
+                                                <select name="fangyuanEntity.fyDhCode" id="fyDh" class="ui_select01">
+                                                    <option value="">--请选择--</option>
+                                                </select>
+                                                户型
+                                                <select name="fangyuanEntity.fyHxCode" id="fyHx" class="ui_select01">
+                                                    <option value="">--请选择--</option>
+                                                    <option value="76">一室一厅一卫</option>
+                                                    <option value="10">两室一厅一卫</option>
+                                                    <option value="14">三室一厅一卫</option>
+                                                    <option value="71">三室两厅一卫</option>
+                                                </select>
+                                                状态
+                                                <select name="fangyuanEntity.fyStatus" id="fyStatus" class="ui_select01">
+                                                    <option value="">--请选择--</option>
+                                                    <option value="26">在建</option>
+                                                    <option value="25">建成待租</option>
+                                                    <option value="13">已配租</option>
+                                                    <option value="12">已租赁</option>
+                                                    <option value="24">腾退待租</option>
+                                                    <option value="23">欠费</option>
+                                                    <option value="27">其他</option>
+                                                </select>
+
+                                                座落&nbsp;&nbsp;<input type="text" id="fyZldz" name="fangyuanEntity.fyZldz" class="ui_input_txt02" />
+                                            </div> -->
+                    <div id="box_bottom">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui_content">
+            <div class="ui_tb">
+                <table id="AllDuty" class="table" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+
+                </table>
+            </div>
+            <!-- <div class="ui_tb_h30">
+                <div class="ui_flt" style="height: 30px; line-height: 30px;">
+                    共有
+                    <span class="ui_txt_bold04">90</span>
+                    条记录，当前第
+                    <span class="ui_txt_bold04">1
+                    /
+                    9</span>
+                    页
+                </div>
+                <div class="ui_frt">
+                       如果是第一页，则只显示下一页、尾页
+
+                        <input type="button" value="首页" class="ui_input_btn01" />
+                        <input type="button" value="上一页" class="ui_input_btn01" />
+                        <input type="button" value="下一页" class="ui_input_btn01"
+                            onclick="jumpNormalPage(2);" />
+                        <input type="button" value="尾页" class="ui_input_btn01"
+                            onclick="jumpNormalPage(9);" />
+
+
+
+                        如果是最后一页，则只显示首页、上一页
+
+                    转到第<input type="text" id="jumpNumTxt" class="ui_input_txt01" />页
+                         <input type="button" class="ui_input_btn01" value="跳转" onclick="jumpInputPage(9);" />
+                </div>
+            </div> -->
+        </div>
+    </div>
+</form>
+
+</body>
+</html>

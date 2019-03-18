@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.jbit.guide_sys.mapper.LiuyanMapper">
+
+    <insert id="addLiuyanT">
+        INSERT INTO `guide`.`liuyan` (`id`,
+                                      `wen_id`,
+                                      `s_name`,
+                                      `t_name`,
+                                      `message`)
+            VALUES
+            (
+             null,
+             #{wen_id},
+             #{s_name},
+                #{t_name},
+                #{message}
+                )
+    </insert>
+
+    <select id="selLiuyan" resultType="cn.jbit.guide_sys.pojo.Liuyan">
+        select * from liuyan where wen_id=#{id}
+    </select>
+    <update id="addhuifu">
+        update liuyan set reply=#{reply} where id=#{id}
+    </update>
+</mapper>

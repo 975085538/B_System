@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.jbit.guide_sys.mapper.JishuMapper">
+
+    <select id="selJishu" resultType="cn.jbit.guide_sys.pojo.Jishu">
+		SELECT * FROM jishu WHERE bigId=#{id}
+	</select>
+
+    <select id="selmohu" resultType="cn.jbit.guide_sys.pojo.Jishu">
+		SELECT * FROM jishu WHERE `name` LIKE CONCAT('%',#{name },'%')
+	</select>
+
+<!--   	<select id="selAdmin" resultType="cn.jbit.pojo.Admin">
+        select * from admin
+        </select>-->
+        <insert id="addJishu">
+        insert into jishu values(null,#{name},#{xinxi},#{fazhang},#{href},#{bigId})
+        </insert>
+<!--        <delete id="delAdmin">
+        delete from  admin	where id=#{id}
+        </delete>-->
+</mapper>

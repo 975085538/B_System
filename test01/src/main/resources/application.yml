@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/guide?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+  thymeleaf:
+             cache: false
+  servlet:
+    multipart:
+      location: d:/files
+      file-size-threshold: 204800
+      max-file-size: 20MB
+  http:
+    encoding:
+      charset: utf-8
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+  type-aliases-package: cn.jbit.guide_sys.pojo
+  
+ 

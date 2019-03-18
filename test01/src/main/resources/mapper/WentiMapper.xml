@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.jbit.guide_sys.mapper.WentiMapper">
+
+    <select id="selWenti" resultType="cn.jbit.guide_sys.pojo.Wenti">
+		SELECT * FROM wenti
+	</select>
+	<insert id="addWenti">
+		INSERT INTO wenti VALUES(NULL,#{name},#{desc},#{type},#{tname},0,0,NULL,NULL)
+	</insert>
+	<update id="count">
+		UPDATE wenti SET count1=count1+1,count2=count2+1 WHERE wenId=#{id}
+	</update>
+</mapper>

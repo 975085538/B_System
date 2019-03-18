@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.jbit.guide_sys.mapper.TeacherMapper">
+
+    <select id="selTeacher" resultType="cn.jbit.guide_sys.pojo.Teacher">
+		SELECT * FROM teacher
+	</select>
+    <select id="selTeacherById" resultType="Integer">
+		SELECT count(*) FROM teacher where tId=#{tId} and tPass=#{tPass}
+	</select>
+    <select id="selTeacherByname" resultType="cn.jbit.guide_sys.pojo.Teacher">
+		SELECT * FROM teacher where tId=#{tId}
+	</select>
+    <select id="selTeacherType" resultType="cn.jbit.guide_sys.pojo.Teacher">
+        SELECT * FROM teacher WHERE fangxiang=#{type}
+    </select>
+<!--   	<select id="selAdmin" resultType="cn.jbit.pojo.Admin">
+        select * from admin
+        </select>-->
+        <insert id="addTeacher">
+        insert into teacher values(null,#{tId},#{tname},#{tPass},#{yuanyi},#{fangxiang},#{email})
+        </insert>
+        <delete id="delTeacher">
+        delete from  teacher	where id=#{id}
+        </delete>
+    <update id="updTeacher">
+        update teacher set tname=#{tname},tPass=#{tPass},yuanyi=#{yuanyi},fangxiang=#{fangxiang},email=#{email} where id=#{id}
+    </update>
+    <update id="updTeacherMima">
+        update teacher set tPass=#{tPass} where tId=#{tId}
+    </update>
+
+</mapper>

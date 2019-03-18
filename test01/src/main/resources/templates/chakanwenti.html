@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>信息管理系统</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript" src="/scripts/jquery/jquery-1.7.1.js"></script>
+    <link href="/style/authority/basic_layout.css" rel="stylesheet" type="text/css">
+    <link href="/style/authority/common_style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="/scripts/authority/commonAll.js"></script>
+    <script type="text/javascript" src="/scripts/jquery/jquery-1.4.4.min.js"></script>
+    <script src="/scripts/My97DatePicker/WdatePicker.js" type="text/javascript" defer="defer"></script>
+    <script type="text/javascript">
+        $(function () {
+            SelDuty();
+            Selliuyan();
+            Selhuifu();
+        });
+
+        function count() {
+            var id=$("#id").val();
+            $.ajax({
+                url:"/wenti/count/"+id,
+            });
+        }
+        function SelDuty(){
+            var type=$("#type").val();
+            $.ajax({
+                "url":"/teacher/selTeacherType/"+type,
+                "type":"post",
+                "dataType":"json",
+                "success":function(res){
+                    $(res).each(function(){
+                        $("#teacher").append("<li value='"+this.tname+"' id='haha'>"+this.tname+"</li><input type='text' id='text'><input type='button' value='留言' onclick='liuyan()'>");
+                    });
+                    count();
+                }
+            })
+        }
+
+
+        function Selliuyan(){
+            var id=$("#id").val();
+            $("#liuyan").html("");
+            $.ajax({
+                "url":"/liuyan/selLiuyan/"+id,
+                "type":"post",
+                "dataType":"json",
+                "success":function(res){
+                    $(res).each(function(){
+                        $("#liuyan").append("<li hidden='hidden' id='liuyanid'>"+this.id+"</li><li id='haha'>老师姓名："+this.t_name+"留言内容："+this.message+"</li><input type='text' id='"+this.id+"'><input type='button' value='回复' onclick='huifu("+this.id+")'>");
+                    });
+                }
+            })
+        }
+
+
+        function Selhuifu(){
+            $("#huifuxinxi").html("");
+            var id=$("#id").val();
+            $.ajax({
+                "url":"/liuyan/selLiuyan/"+id,
+                "type":"post",
+                "dataType":"json",
+                "success":function(res){
+                    $(res).each(function(){
+                        $("#huifuxinxi").append("<li hidden='hidden' id='liuyanid1'>"+this.id+"</li><li id='haha'>老师姓名："+this.t_name+"留言内容："+this.message+"</li><li>回复内容:"+this.reply+"</li>");
+                    });
+                }
+            })
+        }
+
+
+        function liuyan(){
+            var id=$("#id").val();
+            var t=$("#haha").text();
+            var text=$("#text").val();
+            var stuName=$("#stuName").val();
+            $.ajax({
+                "url":"/liuyan/addLiuyanT",
+                "type":"post",
+                "data":{
+                    'wen_id':id,
+                    't_name':t,
+                    'message':text,
+                    's_name':stuName,
+                },
+                "dataType":"json",
+                "success":function(res){
+                    if(res>0){
+                        alert("留言成功");
+                        Selliuyan();
+                    }else{
+                        alert("留言失败");
+                    }
+                }
+            })
+
+        }
+        function huifu(id){
+            var text=$("#"+id+"").val();
+            $.ajax({
+                "url":"/liuyan/addhuifu",
+                "type":"post",
+                "data":{
+                    'id':id,
+                    'reply':text,
+                },
+                "dataType":"json",
+                "success":function(res){
+                    if(res>0){
+                        alert("回复成功");
+                        Selhuifu();
+                    }else{
+                        alert("回复失败");
+                    }
+                }
+            })
+
+        }
+
+        $(document).ready(function() {
+
+            //查询全部
+
+
+
+
+
+
+            /*
+             * 提交
+             */
+            $("#submitbutton").click(function() {
+                var id=$("#id").val();
+                var name=$("#name").val();
+                var pass=$("#pass").val();
+                var yuanyi=$("#yuanxi").val();
+                var zhuangye=$("#zhuangye").val();
+                var email=$("#email").val();
+                $.ajax({
+                    "url":"/liuyan/addLiuyanT",
+                    "type":"post",
+                    "data":{
+                        'id':id,
+                        'stuName':name,
+                        'stuPass':pass,
+                        'yuanyi':yuanyi,
+                        'zhuangye':zhuangye,
+                        'email':email
+                    },
+                    "dataType":"json",
+                    "success":function(res){
+                        if(res>0){
+                            alert("修改成功");
+                            location.href="/tiao/student";
+                        }else{
+                            alert("修改失败");
+                        }
+                    }
+                })
+            });
+
+            /*
+             * 取消
+             */
+            $("#cancelbutton").click(function() {
+                /**  关闭弹出iframe  **/
+                location.href="/tiao/wenti1";
+            });
+
+            var result = 'null';
+            if(result =='success'){
+                /**  关闭弹出iframe  **/
+                window.parent.$.fancybox.close();
+
+
+            }
+        });
+
+
+    </script>
+</head>
+<body>
+<form id="submitForm" name="submitForm" action="/xngzf/archives/initFangyuan.action" method="post">
+    <input type="hidden" name="fyID" value="14458625716623" id="fyID"/>
+    <input type="hidden" name="fyID" th:value="${w.type}" id="type"/>
+    <input type="hidden" name="fyID" th:value="${w.wenId}" id="id"/>
+    <input type="hidden" name="fyID" th:value="${w.count1}" id="count"/>
+    <input type="hidden" name="fyID" th:value="${l.s_name}" id="stuName"/>
+    <div id="container">
+        <div id="nav_links">
+            当前位置：&nbsp;>&nbsp;<span style="color: #1A5CC6;">沟通交流</span>
+            <div id="page_close">
+                <a href="javascript:parent.$.fancybox.close();">
+                    <img src="/images/common/page_close.png" width="20" height="20" style="vertical-align: text-top;"/>
+                </a>
+            </div>
+        </div>
+        <div class="ui_content">
+            <table  cellspacing="0" cellpadding="0" width="100%" align="left" border="0">
+                <tr>
+                    <td class="ui_text_rt" width="80">题目姓名：</td>
+                    <td class="ui_text_lt">
+                        <input type="text" id="name" name="fangyuanEntity.fyCh" th:value="${w.getName()}"  />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui_text_rt" width="80">题目描述：</td>
+                    <td class="ui_text_lt">
+                        <textarea th:text="${w.getDesc()}"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui_text_rt" width="80">老师：</td>
+                    <td class="ui_text_lt" >
+                        <ol id="teacher">
+
+                        </ol>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui_text_rt" width="80">留言信息：</td>
+                    <td class="ui_text_lt" >
+                        <ol id="liuyan">
+
+                        </ol>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui_text_rt" width="80">回复信息：</td>
+                    <td class="ui_text_lt" >
+                        <ol id="huifuxinxi">
+
+                        </ol>
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td class="ui_text_lt">
+                        &nbsp;<input id="cancelbutton" type="button" value="取消" class="ui_input_btn01"/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</form>
+
+</body>
+</html>

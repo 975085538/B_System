@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.jbit.guide_sys.mapper.StudentMapper">
+    <resultMap type="cn.jbit.guide_sys.pojo.Student" id="result">
+        <id column="id" property="id"  />
+        <result column="stuName" property="stuName"  />
+        <result column="stuId" property="stuId"  />
+        <result column="stuPass" property="stuPass"  />
+        <result column="yuanyi" property="yuanyi" />
+        <result column="zhuangye" property="zhuangye"  />
+        <result column="email" property="email"  />
+        <result column="teacherId" property="teacherId"  />
+        <association property="teacher" javaType="cn.jbit.guide_sys.pojo.Teacher">
+            <id column="id" property="id"  />
+            <result column="tId" property="tId"  />
+            <result column="tname" property="tname"  />
+            <result column="tPass" property="tPass"  />
+            <result column="yuanyi" property="yuanyi"  />
+            <result column="fangxiang" property="fangxiang"  />
+            <result column="email" property="email"  />
+        </association>
+    </resultMap>
+
+    <select id="selStudent" resultMap="result">
+		SELECT * FROM student t1,teacher t2 WHERE t1.`teacherId`=t2.`id`
+	</select>
+    <select id="selStudentByname" resultMap="result">
+		SELECT * FROM student t1,teacher t2 WHERE t1.`teacherId`=t2.`id` AND t1.stuId=#{stuId}
+	</select>
+
+    <select id="selStudentById" resultType="Integer">
+		SELECT count(*) FROM student where stuId=#{stuId} and stuPass=#{stuPass}
+	</select>
+    <delete id="delStudent">
+        delete from  student where id=#{id}
+        </delete>
+        <insert id="addStudent">
+       insert into student values(null,#{stuName},#{stuId},#{stuPass},#{yuanyi},#{zhuangye},#{email},#{teacherId})
+       </insert>
+        <update id="updStudent">
+        update student set stuName=#{stuName},stuPass=#{stuPass},yuanyi=#{yuanyi},zhuangye=#{zhuangye},email=#{email} where id=#{id}
+        </update>
+    <update id="updStuMima">
+        update student set stuPass=#{stuPass} where stuId=#{stuId}
+        </update>
+
+<!--   	<select id="selAdmin" resultType="cn.jbit.pojo.Admin">
+       select * from admin
+       </select>-->
+        <!--<insert id="addTeacher">
+        insert into teacher values(null,#{tId},#{tname},#{tPass},#{yuanyi},#{fangxiang},#{email})
+        </insert>
+        <delete id="delTeacher">
+        delete from  teacher	where id=#{id}
+        </delete>
+        <update id="updTeacher">
+        update teacher set tname=#{tname},tPass=#{tPass},yuanyi=#{yuanyi},fangxiang=#{fangxiang},email=#{email} where id=#{id}
+        </update>-->
+</mapper>
